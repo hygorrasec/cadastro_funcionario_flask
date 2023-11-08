@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Funcionários</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div id="cadastrado" class="alert alert-success">
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            <span class="closebtn" onclick="closeAlert()">&times;</span>
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <h1>Cadastro de Funcionários</h1>
+
+    <form method="post" action="/index">
+        <label for="primeiro_nome">Nome:</label>
+        <input type="text" id="primeiro_nome" name="primeiro_nome" required><br>
+
+        <label for="sobrenome">Sobrenome:</label>
+        <input type="text" id="sobrenome" name="sobrenome" required><br>
+
+        <label for="id_setor">Setor:</label>
+        <select id="id_setor" name="id_setor">
+            {% for setor in setores %}
+            <option value="{{ setor[0] }}">{{ setor[1] }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="id_cargo">Cargo:</label>
+        <select id="id_cargo" name="id_cargo">
+            {% for cargo in cargos %}
+            <option value="{{ cargo[0] }}">{{ cargo[1] }}</option>
+            {% endfor %}
+        </select><br>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <h2>Funcionários Cadastrados</h2>
+    <table>
+        <tr>
+            <th>Nome</th>
+            <th>Sobrenome</th>
+            <th>Data de Admissão</th>
+            <th>Status do Funcionário</th>
+            <th>Setor</th>
+            <th>Cargo</th>
+        </tr>
+        {% for funcionario in funcionarios %}
+        <tr>
+            <td>{{ funcionario[1] }}</td>
+            <td>{{ funcionario[2] }}</td>
+            <td>{{ funcionario[3] | string_to_date }}</td>
+            <td>{{ 'Ativo' if funcionario[4] else 'Inativo' }}</td>
+            <td>{{ funcionario[5] }}</td>
+            <td>{{ funcionario[6] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+<script>
+    function closeAlert() {
+        var alert = document.getElementById("cadastrado");
+        alert.style.display = "none";
+    }
+</script>
+
+</body>
+</html>
